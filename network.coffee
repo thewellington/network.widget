@@ -10,7 +10,7 @@
 command: "network.widget/network.sh"
 
 # the refresh frequency in milliseconds
-refreshFrequency: 1000000
+refreshFrequency: 60000
 
 # render gets called after the shell command has executed. The command's output
 # is passed in as a string. Whatever it returns will get rendered as HTML.
@@ -21,18 +21,20 @@ render: (output) -> """
 
 # the CSS style for this widget, written using Stylus
 # (http://learnboost.github.io/stylus/)
+#  font-family: Helvetica Neue
 style: """
-  color: #fff
-  font-family: Helvetica Neue
-  font-weight: 300
-  font-size: 14px
-  line-height: 1.5
-  margin-left: 0px
-  padding: 20px 20px 20px
-  bottom: 0%
-  left: 0%
-  width: 340px
-  text-align: justify
+
+    color: #fff
+    font-weight: 300
+    font-family: Helvetica Neue
+    font-size: 14px
+    line-height: 1.5
+    margin-left: 0px
+    padding: 20px 20px 20px
+    bottom: 0%
+    left: 0%
+    width: 340px
+    text-align: justify
 
   h1
     font-size: 18px
@@ -61,5 +63,6 @@ style: """
 
   .red
     color: #fc0000
+
 
 """
