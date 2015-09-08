@@ -5,6 +5,10 @@
 iconGood="<i class='fa fa-check-circle green'></i>"
 iconAlert="<i class='fa fa-times-circle red'></i>"
 iconWifi="<i class='fa fa-wifi'></i>"
+iconWorld="<i class='fa fa-globe'></i>"
+iconRoute="<i class='fa fa-sign-out blue'></i>"
+
+publicIP=$(curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
 
 # Uses the airport command line utility to get the current SSID
 currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
@@ -22,8 +26,8 @@ defaultRoute=$(route -n get default | grep -o "interface: .*" | awk '{print $2}'
 wiredIcon=""
 wirelessIcon=""
 
-if [ "$defaultRoute" == "$wiredDevice" ]; then wiredIcon="🔹"; fi
-if [ "$defaultRoute" == "$wirelessDevice" ]; then wirelessIcon="🔹"; fi
+if [ "$defaultRoute" == "$wiredDevice" ]; then wiredIcon=$iconRoute; fi
+if [ "$defaultRoute" == "$wirelessDevice" ]; then wirelessIcon=$iconRoute; fi
 
 #----------FUNCTIONS---------
 getWirelesstNetworkAndDisplayIp()
@@ -47,13 +51,10 @@ displayEthernetIp()
 
  wiredIP=$(ipconfig getifaddr $1)
 if [ ! -z "${wiredIP}" ];then
-        selfAssigned=$( echo $wiredIP | grep "169\.254\.[0-9]\{1,3\}\.[0-9]\{1,3\}" )
+        icon=""
 
-        if [ ! -z $selfAssigned ]; then
-            echo "<tr><td>$iconGood Ethernet IP ($1)</td><td><span class='green'>$wiredIP${wiredIcon}</span></td></tr>"
-        else
-            echo "<tr><td>$iconGood Ethernet IP ($1)</td><td><span class='green'>$wiredIP${wiredIcon}</span></td></tr>"
-        fi
+        if [ "$defaultRoute" == "$1" ]; then icon=$iconRoute; fi
+        echo "<tr><td>$iconGood Ethernet IP ($1)</td><td><span class='green'>$wiredIP${wiredIcon}</span> $icon</td></tr>"
 else
         echo "<tr><td>$iconAlert Ethernet IP ($1)</td><td><span class='red'>INACTIVE</span></td></tr>"
 fi
@@ -71,4 +72,10 @@ getWirelesstNetworkAndDisplayIp
 for i in $wiredDevice; do
 	displayEthernetIp $i
 done
+if [ ! -z "${wiredIP}" ];then
+  echo "<tr><td><span class='green'>$iconWorld</span> Public IP</td><td><span class='green'>$publicIP</span></td></tr>"
+else
+  echo "<tr><td><span class='red'>$iconWorld</span> Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
+fi
+
 echo "</table>"
