@@ -10,7 +10,7 @@
 command: "network.widget/network.sh"
 
 # the refresh frequency in milliseconds
-refreshFrequency: 1800000
+refreshFrequency: 180000
 
 # render gets called after the shell command has executed. The command's output
 # is passed in as a string. Whatever it returns will get rendered as HTML.
