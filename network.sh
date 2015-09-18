@@ -31,7 +31,7 @@ array_contains() {
 
 array_contains desiredNetwork "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
 
-echo $safeNetwork
+
 wifiOrAirport=$(/usr/sbin/networksetup -listallnetworkservices | grep -Ei '(Wi-Fi|AirPort)')
 wirelessDevice=$(/usr/sbin/networksetup -listallhardwareports | awk "/$wifiOrAirport/,/Device/" | awk 'NR==2' | cut -d " " -f 2)
 wirelessIP=$(ipconfig getifaddr $wirelessDevice)
