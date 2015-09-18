@@ -14,8 +14,24 @@ publicIP=$(curl -s http://icanhazip.com)
 # Uses the airport command line utility to get the current SSID
 currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
 # If the current network does not match this, it will show as red text
-desiredNetwork="PoohCorner"
+desiredNetwork=("PoohCorner" "712-100")
 
+array_contains() {
+    local array="$1[@]"
+    local seeking=$2
+    local in=1
+    for element in "${!array}"; do
+        if [[ $element == $seeking ]]; then
+            in=0
+            break
+        fi
+    done
+    return $in
+}
+
+array_contains desiredNetwork "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
+
+echo $safeNetwork
 wifiOrAirport=$(/usr/sbin/networksetup -listallnetworkservices | grep -Ei '(Wi-Fi|AirPort)')
 wirelessDevice=$(/usr/sbin/networksetup -listallhardwareports | awk "/$wifiOrAirport/,/Device/" | awk 'NR==2' | cut -d " " -f 2)
 wirelessIP=$(ipconfig getifaddr $wirelessDevice)
@@ -35,7 +51,7 @@ getWirelesstNetworkAndDisplayIp()
 #################################
 {
 # If the current network does not equal the desired network, then
-if [ "$currentNetwork" != "$desiredNetwork" ];then
+if [ "$safeNetwork" != "1" ];then
 echo "<tr><td>$iconAlert $iconWifi Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
 echo "<tr><td>$iconAlert $iconWifi Wireless IP</td><td><span class='red'>$wirelessIP${wirelessIcon}</span></td></tr>"
 else
