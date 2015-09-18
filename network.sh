@@ -52,11 +52,11 @@ getWirelesstNetworkAndDisplayIp()
 {
 # If the current network does not equal the desired network, then
 if [ "$safeNetwork" != "1" ];then
-echo "<tr><td>$iconAlert $iconWifi Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
-echo "<tr><td>$iconAlert $iconWifi Wireless IP</td><td><span class='red'>$wirelessIP${wirelessIcon}</span></td></tr>"
+echo "<tr><td><span class='red'>$iconWifi</span> Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
+echo "<tr><td><span class='red'>$iconWifi</span> Wireless IP</td><td><span class='red'>$wirelessIP${wirelessIcon}</span></td></tr>"
 else
-        echo "<tr><td>$iconGood $iconWifi Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
-echo "<tr><td class=good>$iconGood $iconWifi Wireless IP (en0)</td><td><span class='green'>$wirelessIP${wirelessIcon}</span></td></tr>"
+        echo "<tr><td><span class='green'>$iconWifi</span> Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
+echo "<tr><td class=good><span class='green'>$iconWifi</span> Wireless IP (en0)</td><td><span class='green'>$wirelessIP${wirelessIcon}</span></td></tr>"
 fi
 }
 
