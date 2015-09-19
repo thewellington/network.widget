@@ -22,11 +22,6 @@ wiredDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Thunderbolt|E
 # get default route
 defaultRoute=$(route -n get default | grep -o "interface: .*" | awk '{print $2}')
 
-wiredIcon=""
-wirelessIcon=""
-
-if [ "$defaultRoute" == "$wiredDevice" ]; then wiredIcon=$iconRoute; fi
-if [ "$defaultRoute" == "$wirelessDevice" ]; then wirelessIcon=$iconRoute; fi
 
 #----------FUNCTIONS---------
 
@@ -110,9 +105,8 @@ mainDisplay() {
     for i in $wiredDevice; do
         displayWiredInterface $i
     done
-
+    
     displayPublicIP
-
 
     echo "</table>"
 }
