@@ -79,22 +79,6 @@ displayWiredInterface() {
     fi
 
 }
-#--------------------------------
-#----------BEGIN SCRIPT----------
-#--------------------------------
-
-echo "<h1>NETWORK</h1>
-<table>"
-getWirelesstNetworkAndDisplayIp
-#displayEthernetIp()
-
-for i in $wiredDevice; do
-	displayEthernetIp $i
-done
-if [ ! -z "${publicIP}" ];then
-  echo "<tr><td><span class='green'>$iconWorld</span> Public IP</td><td><span class='green'>$publicIP</span></td></tr>"
-else
-  echo "<tr><td><span class='red'>$iconWorld</span> Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
 
 
 displayPublicIP() {
@@ -105,5 +89,24 @@ displayPublicIP() {
     else
         echo "<tr><td><span class='red'>$iconWorld</span> Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
 fi
+}
 
-echo "</table>"
+mainDisplay() {
+    echo "<h1>NETWORK</h1>
+    <table>"
+
+    displayWirelessInterface
+
+    for i in $wiredDevice; do
+        displayWiredInterface $i
+    done
+
+    displayPublicIP
+
+
+    echo "</table>"
+}
+
+
+# OK Lets make it happen!
+mainDisplay
