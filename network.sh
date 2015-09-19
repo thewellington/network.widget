@@ -14,6 +14,8 @@ iconWifi="<i class='fa fa-wifi'></i>"
 iconWorld="<i class='fa fa-globe'></i>"
 iconRoute=" <i class='fa fa-sign-out blue'></i>"
 
+# get default route
+defaultRoute=$(route -n get default | grep -o "interface: .*" | awk '{print $2}')
 
 # get current SSID
 currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
@@ -27,7 +29,7 @@ wirelessIP=$(ipconfig getifaddr $wirelessDevice)
 #wiredDevice=$(networksetup -listallhardwareports | grep -A 1 "Port: Display Ethernet" | sed -n 's/Device/&/p' | awk '{print $2}')
 wiredDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Thunderbolt|Ethernet)' | grep en | sed -n 's/Device/&/p' | awk '{print $2}' | sort)
 
-defaultRoute=$(route -n get default | grep -o "interface: .*" | awk '{print $2}')
+
 
 wiredIcon=""
 wirelessIcon=""
