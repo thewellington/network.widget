@@ -4,7 +4,7 @@
 
 
 # User assigned array.  List the ssid's you wish to consider "safe"
-# desiredNetwork=("ssid_1" "ssid_2" "ssid_3")
+# safeNetworkArray=("ssid_1" "ssid_2" "ssid_3")
 safeNetworksArray=("PoohCorner" "712-100")
 
 # fontawesome classes
@@ -18,12 +18,8 @@ iconRoute=" <i class='fa fa-sign-out blue'></i>"
 wirelessDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Wi-Fi|Airport)' | grep en | sed -n 's/Device/&/p' | awk '{print $2}' | sort)
 wiredDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Thunderbolt|Ethernet)' | grep en | sed -n 's/Device/&/p' | awk '{print $2}' | sort)
 
-
 # get default route
 defaultRoute=$(route -n get default | grep -o "interface: .*" | awk '{print $2}')
-
-
-#----------FUNCTIONS---------
 
 array_contains() {
 # for going through the contents of an array
@@ -38,7 +34,6 @@ array_contains() {
     done
     return $in
 }
-
 
 displayWirelessInterface() {
 #
@@ -63,10 +58,8 @@ displayWirelessInterface() {
     fi
 }
 
-
 displayWiredInterface() {
 #    
-
     # display wired device information
     wiredIP=$(ipconfig getifaddr $1)
     
@@ -83,9 +76,8 @@ displayWiredInterface() {
 
 }
 
-
 displayPublicIP() {
-    # get public IP
+# get public IP
     publicIP=$(curl -s http://icanhazip.com)
     if [ ! -z "${publicIP}" ];then
         echo "<tr><td><span class='green'>$iconWorld</span> Public IP</td><td><span class='green'>$publicIP</span></td></tr>"
@@ -110,7 +102,6 @@ mainDisplay() {
 
     echo "</table>"
 }
-
 
 # OK Lets make it happen!
 mainDisplay
