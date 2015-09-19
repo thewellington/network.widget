@@ -47,17 +47,13 @@ array_contains() {
 
 displayWirelessInterface() {
 #
-    #wifiOrAirport=$(/usr/sbin/networksetup -listallnetworkservices | grep -Ei '(Wi-Fi|AirPort)')
-    #wirelessDevice=$(/usr/sbin/networksetup -listallhardwareports | awk "/$wifiOrAirport/,/Device/" | awk 'NR==2' | cut -d " " -f 2)
-
-    # get wireless device list
     wirelessIP=$(ipconfig getifaddr $1)
 
-    # get current SSID
+    # get current SSID - and check it agains the array
     currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
-    
-    # display wireless device information
     array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
+
+    # display wireless device information
     if [ "$safeNetwork" != "1" ];then
         echo "<tr><td><span class='red'>$iconWifi</span> Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
         echo "<tr><td><span class='red'>$iconWifi</span> Wireless IP ($1)</td><td><span class='red'>$wirelessIP${wirelessIcon}</span></td></tr>"
