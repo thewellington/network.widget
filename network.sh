@@ -14,8 +14,6 @@ iconWifi="<i class='fa fa-wifi'></i>"
 iconWorld="<i class='fa fa-globe'></i>"
 iconRoute=" <i class='fa fa-sign-out blue'></i>"
 
-# get a public ip
-publicIP=$(curl -s http://icanhazip.com)
 
 # get current SSID
 currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
@@ -97,6 +95,15 @@ if [ ! -z "${publicIP}" ];then
   echo "<tr><td><span class='green'>$iconWorld</span> Public IP</td><td><span class='green'>$publicIP</span></td></tr>"
 else
   echo "<tr><td><span class='red'>$iconWorld</span> Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
+
+
+displayPublicIP() {
+    # get public IP
+    publicIP=$(curl -s http://icanhazip.com)
+    if [ ! -z "${publicIP}" ];then
+        echo "<tr><td><span class='green'>$iconWorld</span> Public IP</td><td><span class='green'>$publicIP</span></td></tr>"
+    else
+        echo "<tr><td><span class='red'>$iconWorld</span> Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
 fi
 
 echo "</table>"
