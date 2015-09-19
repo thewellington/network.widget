@@ -51,10 +51,6 @@ array_contains() {
 }
 
 
-displayEthernetIp()
-###################
-{
-# If the Ethernet adapter is not equal to a null value (no IP address), then
 displayWirelessInterface() {
 #
     array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
@@ -68,15 +64,17 @@ displayWirelessInterface() {
 }
 
 
- wiredIP=$(ipconfig getifaddr $1)
-if [ ! -z "${wiredIP}" ];then
+displayWiredInterface() {
+#
+    wiredIP=$(ipconfig getifaddr $1)
+    if [ ! -z "${wiredIP}" ];then
         icon=""
 
         if [ "$defaultRoute" == "$1" ]; then icon=$iconRoute; fi
         echo "<tr><td>$iconGood Ethernet IP ($1)</td><td><span class='green'>$wiredIP${wiredIcon}</span> $icon</td></tr>"
-else
+    else
         echo "<tr><td>$iconAlert Ethernet IP ($1)</td><td><span class='red'>INACTIVE</span></td></tr>"
-fi
+    fi
 
 }
 #--------------------------------
