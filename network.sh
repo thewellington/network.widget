@@ -14,22 +14,13 @@ iconWifi="<i class='fa fa-wifi'></i>"
 iconWorld="<i class='fa fa-globe'></i>"
 iconRoute=" <i class='fa fa-sign-out blue'></i>"
 
-# get default route
-defaultRoute=$(route -n get default | grep -o "interface: .*" | awk '{print $2}')
-
-# get current SSID
-currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
-
-
-
-# lets find some network interfaces
-wifiOrAirport=$(/usr/sbin/networksetup -listallnetworkservices | grep -Ei '(Wi-Fi|AirPort)')
-wirelessDevice=$(/usr/sbin/networksetup -listallhardwareports | awk "/$wifiOrAirport/,/Device/" | awk 'NR==2' | cut -d " " -f 2)
-wirelessIP=$(ipconfig getifaddr $wirelessDevice)
-#wiredDevice=$(networksetup -listallhardwareports | grep -A 1 "Port: Display Ethernet" | sed -n 's/Device/&/p' | awk '{print $2}')
+# get some interfaces
+wirelessDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Wi-Fi|Airport)' | grep en | sed -n 's/Device/&/p' | awk '{print $2}' | sort)
 wiredDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Thunderbolt|Ethernet)' | grep en | sed -n 's/Device/&/p' | awk '{print $2}' | sort)
 
 
+# get default route
+defaultRoute=$(route -n get default | grep -o "interface: .*" | awk '{print $2}')
 
 wiredIcon=""
 wirelessIcon=""
@@ -40,6 +31,7 @@ if [ "$defaultRoute" == "$wirelessDevice" ]; then wirelessIcon=$iconRoute; fi
 #----------FUNCTIONS---------
 
 array_contains() {
+# for going through the contents of an array
     local array="$1[@]"
     local seeking=$2
     local in=1
@@ -55,6 +47,16 @@ array_contains() {
 
 displayWirelessInterface() {
 #
+    #wifiOrAirport=$(/usr/sbin/networksetup -listallnetworkservices | grep -Ei '(Wi-Fi|AirPort)')
+    #wirelessDevice=$(/usr/sbin/networksetup -listallhardwareports | awk "/$wifiOrAirport/,/Device/" | awk 'NR==2' | cut -d " " -f 2)
+
+    # get wireless device list
+    wirelessIP=$(ipconfig getifaddr $1)
+
+    # get current SSID
+    currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
+    
+    # display wireless device information
     array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
     if [ "$safeNetwork" != "1" ];then
         echo "<tr><td><span class='red'>$iconWifi</span> Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
@@ -67,7 +69,7 @@ displayWirelessInterface() {
 
 
 displayWiredInterface() {
-#
+#    
     wiredIP=$(ipconfig getifaddr $1)
     if [ ! -z "${wiredIP}" ];then
         icon=""
@@ -95,8 +97,10 @@ mainDisplay() {
     echo "<h1>NETWORK</h1>
     <table>"
 
-    displayWirelessInterface
-
+    for i in $wirelessDevice; do
+        displayWirelessInterface
+    done
+    
     for i in $wiredDevice; do
         displayWiredInterface $i
     done
