@@ -60,10 +60,10 @@ displayWirelessInterface() {
     array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
     if [ "$safeNetwork" != "1" ];then
         echo "<tr><td><span class='red'>$iconWifi</span> Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
-        echo "<tr><td><span class='red'>$iconWifi</span> Wireless IP</td><td><span class='red'>$wirelessIP${wirelessIcon}</span></td></tr>"
+        echo "<tr><td><span class='red'>$iconWifi</span> Wireless IP ($1)</td><td><span class='red'>$wirelessIP${wirelessIcon}</span></td></tr>"
     else
         echo "<tr><td><span class='green'>$iconWifi</span> Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
-        echo "<tr><td class=good><span class='green'>$iconWifi</span> Wireless IP (en0)</td><td><span class='green'>$wirelessIP${wirelessIcon}</span></td></tr>"
+        echo "<tr><td class=good><span class='green'>$iconWifi</span> Wireless IP ($1)</td><td><span class='green'>$wirelessIP${wirelessIcon}</span></td></tr>"
     fi
 }
 
@@ -98,7 +98,7 @@ mainDisplay() {
     <table>"
 
     for i in $wirelessDevice; do
-        displayWirelessInterface
+        displayWirelessInterface $i
     done
     
     for i in $wiredDevice; do
