@@ -2,19 +2,23 @@
 
 # Network status
 
+# fontawesome classes
 iconGood="<i class='fa fa-check-circle green'></i>"
 iconAlert="<i class='fa fa-times-circle red'></i>"
 iconWifi="<i class='fa fa-wifi'></i>"
 iconWorld="<i class='fa fa-globe'></i>"
 iconRoute=" <i class='fa fa-sign-out blue'></i>"
 
-#publicIP=$(curl -s checkip.dyndns.org|sed -e 's/.*Current IP Address: //' -e 's/<.*$//')
+# get a public ip
 publicIP=$(curl -s http://icanhazip.com)
 
 # Uses the airport command line utility to get the current SSID
 currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
-# If the current network does not match this, it will show as red text
+
+# specify desired SSIDs here
+
 desiredNetwork=("PoohCorner" "712-100")
+
 
 array_contains() {
     local array="$1[@]"
@@ -31,7 +35,7 @@ array_contains() {
 
 array_contains desiredNetwork "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
 
-
+# lets find some network interfaces
 wifiOrAirport=$(/usr/sbin/networksetup -listallnetworkservices | grep -Ei '(Wi-Fi|AirPort)')
 wirelessDevice=$(/usr/sbin/networksetup -listallhardwareports | awk "/$wifiOrAirport/,/Device/" | awk 'NR==2' | cut -d " " -f 2)
 wirelessIP=$(ipconfig getifaddr $wirelessDevice)
