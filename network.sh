@@ -66,12 +66,17 @@ displayWirelessInterface() {
 
 displayWiredInterface() {
 #    
-    wiredIP=$(ipconfig getifaddr $1)
-    if [ ! -z "${wiredIP}" ];then
-        icon=""
 
-        if [ "$defaultRoute" == "$1" ]; then icon=$iconRoute; fi
-        echo "<tr><td>$iconGood Ethernet IP ($1)</td><td><span class='green'>$wiredIP${wiredIcon}</span> $icon</td></tr>"
+    # display wired device information
+    wiredIP=$(ipconfig getifaddr $1)
+    
+    if [ ! -z "${wiredIP}" ];then
+        echo "<tr><td>$iconGood Ethernet IP ($1)</td><td><span class='green'>$wiredIP</span>"
+        if [ "$defaultRoute" == "$1" ]; then
+            echo " $iconRoute</td></tr>"
+        else
+            echo "</td></tr>"
+        fi
     else
         echo "<tr><td>$iconAlert Ethernet IP ($1)</td><td><span class='red'>INACTIVE</span></td></tr>"
     fi
