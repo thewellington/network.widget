@@ -39,23 +39,30 @@ displayWirelessInterface() {
 #
     # get current SSID - and check it against the array
     currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
-    array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
-
-    # display wireless device information
-    wirelessIP=$(ipconfig getifaddr $1)
-
-    if [ "$safeNetwork" != "1" ];then
-        echo "<tr><td><span class='red'>$iconWifi</span> Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
-        echo "<tr><td><span class='red'>$iconWifi</span> Wireless IP ($1)</td><td><span class='red'>$wirelessIP</span></td></tr>"
+    
+    if [ -z "$currentNetwork" ]; then
+        airportStatus=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/AirPort: / {print $2}' | tr -d '[[:space:]]')
+        echo "<tr><td><span class='red'>$iconWifi</span> Wi-Fi</td><td><span class='red'>$airportStatus</span></td></tr>"
     else
-        echo "<tr><td><span class='green'>$iconWifi</span> Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
-        echo "<tr><td class=good><span class='green'>$iconWifi</span> Wireless IP ($1)</td><td><span class='green'>$wirelessIP</span>"
-        if [ "$defaultRoute" == "$1" ]; then
-            echo " $iconRoute</td></tr>"
+        array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
+
+        # display wireless device information
+        wirelessIP=$(ipconfig getifaddr $1)
+
+        if [ "$safeNetwork" != "1" ];then
+            echo "<tr><td><span class='red'>$iconWifi</span> Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
+            echo "<tr><td><span class='red'>$iconWifi</span> Wireless IP ($1)</td><td><span class='red'>$wirelessIP</span></td></tr>"
         else
-            echo "</td></tr>"
+            echo "<tr><td><span class='green'>$iconWifi</span> Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
+            echo "<tr><td class=good><span class='green'>$iconWifi</span> Wireless IP ($1)</td><td><span class='green'>$wirelessIP</span>"
+            if [ "$defaultRoute" == "$1" ]; then
+                echo " $iconRoute</td></tr>"
+            else
+                echo "</td></tr>"
+            fi
         fi
     fi
+    
 }
 
 displayWiredInterface() {
