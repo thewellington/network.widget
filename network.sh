@@ -43,7 +43,7 @@ displayWirelessInterface() {
     # no current network check to see if wifi card is off/inactive, or disconnected
     if [ -z "$currentNetwork" ]; then
         airportStatus=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/AirPort: / {print $2}' | tr -d '[[:space:]]')
-        if [ -z "$sirportStatus" ]; then
+        if [ -z "$airportStatus" ]; then
             echo "<tr><td><span class='red'>$iconWifi</span> Wi-Fi</td><td><span class='red'>Not Connected</span></td></tr>"
         else
             echo "<tr><td><span class='red'>$iconWifi</span> Wi-Fi</td><td><span class='red'>$airportStatus</span></td></tr>"
