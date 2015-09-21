@@ -4,7 +4,7 @@
 
 
 # User assigned array.  List the ssid's you wish to consider "safe"
-# safeNetworkArray=("ssid_1" "ssid_2" "ssid_3")
+# safeNetworksArray=("ssid_1" "ssid_2" "ssid_3")
 safeNetworksArray=("PoohCorner" "712-100")
 
 # fontawesome classes
@@ -37,7 +37,7 @@ array_contains() {
 
 displayWirelessInterface() {
 #
-    # get current SSID - and check it agains the array
+    # get current SSID - and check it against the array
     currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
     array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
 
