@@ -40,9 +40,14 @@ displayWirelessInterface() {
     # get current SSID - and check it against the array
     currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
     
+    # no current network check to see if wifi card is off/inactive, or disconnected
     if [ -z "$currentNetwork" ]; then
         airportStatus=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/AirPort: / {print $2}' | tr -d '[[:space:]]')
-        echo "<tr><td><span class='red'>$iconWifi</span> Wi-Fi</td><td><span class='red'>$airportStatus</span></td></tr>"
+        if [ -z "$sirportStatus" ]; then
+            echo "<tr><td><span class='red'>$iconWifi</span> Wi-Fi</td><td><span class='red'>Not Connected</span></td></tr>"
+        else
+            echo "<tr><td><span class='red'>$iconWifi</span> Wi-Fi</td><td><span class='red'>$airportStatus</span></td></tr>"
+        fi
     else
         array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
 
