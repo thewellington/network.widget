@@ -36,7 +36,6 @@ array_contains() {
 }
 
 displayWirelessInterface() {
-#
     # get current SSID - and check it against the array
     currentNetwork=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/ SSID: / {print $2}' | sed -e 's/SSID: //' | sed -e 's/ //')
     
@@ -44,9 +43,9 @@ displayWirelessInterface() {
     if [ -z "$currentNetwork" ]; then
         airportStatus=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I | awk -F: '/AirPort: / {print $2}' | tr -d '[[:space:]]')
         if [ -z "$airportStatus" ]; then
-            echo "<tr><td><span class='red'>$iconWifi</span> Wi-Fi</td><td><span class='red'>Not Connected</span></td></tr>"
+            echo "<tr><td><span class='red'>$iconWifi</span></td><td>Wi-Fi</td><td><span class='red'>Not Connected</span></td></tr>"
         else
-            echo "<tr><td><span class='red'>$iconWifi</span> Wi-Fi</td><td><span class='red'>$airportStatus</span></td></tr>"
+            echo "<tr><td><span class='red'>$iconWifi</span></td><td>Wi-Fi</td><td><span class='red'>$airportStatus</span></td></tr>"
         fi
     else
         array_contains safeNetworksArray "${currentNetwork}" && safeNetwork=1 || safeNetwork=0
@@ -76,14 +75,15 @@ displayWiredInterface() {
     wiredIP=$(ipconfig getifaddr $1)
     
     if [ ! -z "${wiredIP}" ];then
-        echo "<tr><td>$iconGood Ethernet IP ($1)</td><td><span class='green'>$wiredIP</span>"
+        echo "<tr><td>$iconGood</td><td>Interface ($1)</td><td><span class='green'>$wiredIP</span>"
         if [ "$defaultRoute" == "$1" ]; then
             echo " $iconRoute</td></tr>"
         else
             echo "</td></tr>"
         fi
     else
-        echo "<tr><td>$iconAlert Ethernet IP ($1)</td><td><span class='red'>INACTIVE</span></td></tr>"
+        #echo "<tr><td>$iconAlert</td><td>Interface ($1)</td><td><span class='red'>INACTIVE</span></td></tr>"
+        echo ""
     fi
 
 }
