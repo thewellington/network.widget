@@ -54,11 +54,11 @@ displayWirelessInterface() {
         wirelessIP=$(ipconfig getifaddr $1)
 
         if [ "$safeNetwork" != "1" ];then
-            echo "<tr><td><span class='red'>$iconWifi</span></td><td>Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
-            echo "<tr><td><span class='red'>$iconWifi</span></td><td>Interface ($1)</td><td><span class='red'>$wirelessIP</span></td></tr>"
+#            echo "<tr><td><span class='red'>$iconWifi</span></td><td>Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
+            echo "<tr><td><span class='red'>$iconWifi</span></td><td><span class='red'>$currentNetwork ($1)</span></td><td><span class='red'>$wirelessIP</span></td></tr>"
         else
-            echo "<tr><td><span class='green'>$iconWifi</span></td><td>Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
-            echo "<tr><td class=good><span class='green'>$iconWifi</span></td><td>Interface ($1)</td><td><span class='green'>$wirelessIP</span>"
+ #           echo "<tr><td><span class='green'>$iconWifi</span></td><td>Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
+            echo "<tr><td class=good><span class='green'>$iconWifi</span></td><td><span class='green'>$currentNetwork ($1)</span></td><td><span class='green'>$wirelessIP</span>"
             if [ "$defaultRoute" == "$1" ]; then
                 echo " $iconRoute</td></tr>"
             else
@@ -82,6 +82,7 @@ displayWiredInterface() {
             echo "</td></tr>"
         fi
     else
+        # display nothing
         #echo "<tr><td>$iconAlert</td><td>Interface ($1)</td><td><span class='red'>INACTIVE</span></td></tr>"
         echo ""
     fi
