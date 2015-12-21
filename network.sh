@@ -55,11 +55,11 @@ displayWirelessInterface() {
         wirelessIP=$(ipconfig getifaddr $1)
 
         if [ "$safeNetwork" != "1" ];then
-            echo "<tr><td><span class='red'>$iconWifi</span> Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
-            echo "<tr><td><span class='red'>$iconWifi</span> Wireless IP ($1)</td><td><span class='red'>$wirelessIP</span></td></tr>"
+            echo "<tr><td><span class='red'>$iconWifi</span></td><td>Network SSID</td><td><span class='red'>$currentNetwork</span></td></tr>"
+            echo "<tr><td><span class='red'>$iconWifi</span></td><td>Interface ($1)</td><td><span class='red'>$wirelessIP</span></td></tr>"
         else
-            echo "<tr><td><span class='green'>$iconWifi</span> Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
-            echo "<tr><td class=good><span class='green'>$iconWifi</span> Wireless IP ($1)</td><td><span class='green'>$wirelessIP</span>"
+            echo "<tr><td><span class='green'>$iconWifi</span></td><td>Network SSID</td><td><span class='green'>$currentNetwork</span></td></tr>"
+            echo "<tr><td class=good><span class='green'>$iconWifi</span></td><td>Interface ($1)</td><td><span class='green'>$wirelessIP</span>"
             if [ "$defaultRoute" == "$1" ]; then
                 echo " $iconRoute</td></tr>"
             else
@@ -92,10 +92,11 @@ displayPublicIP() {
 # get public IP
     publicIP=$(curl -s http://icanhazip.com)
     if [ ! -z "${publicIP}" ];then
-        echo "<tr><td><span class='green'>$iconWorld</span> Public IP</td><td><span class='green'>$publicIP</span></td></tr>"
+        echo "<tr><td><span class='green'>$iconWorld</span></td><td>Public IP</td><td><span class='green'>$publicIP</span></td></tr>"
     else
-        echo "<tr><td><span class='red'>$iconWorld</span> Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
-fi
+        #echo "<tr><td><span class='red'>$iconWorld</span></td><td>Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
+        echo ""
+    fi
 }
 
 mainDisplay() {
