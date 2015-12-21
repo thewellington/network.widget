@@ -16,7 +16,7 @@ iconRoute=" <i class='fa fa-sign-out blue'></i>"
 
 # get some interfaces
 wirelessDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Wi-Fi|Airport)' | grep en | sed -n 's/Device/&/p' | awk '{print $2}' | sort)
-wiredDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Thunderbolt|Ethernet)' | grep en | sed -n 's/Device/&/p' | awk '{print $2}' | sort)
+wiredDevice=$(networksetup -listallhardwareports | grep -Ei -A 1 '(Thunderbolt|Ethernet|iPhone)' | grep en | sed -n 's/Device/&/p' | awk '{print $2}' | sort)
 
 # get default route
 defaultRoute=$(route -n get default | grep -o "interface: .*" | awk '{print $2}')

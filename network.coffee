@@ -33,7 +33,7 @@ style: """
     padding: 20px 20px 20px
     bottom: 0%
     left: 0%
-    width 340px
+    width 500px
     text-align: justify
 
     h1
