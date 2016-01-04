@@ -27,7 +27,7 @@ style: """
     color: #fff
     font-weight: 300
     font-family: Helvetica Neue
-    font-size: 14px
+    font-size: 12pt
     line-height: 1.5
     margin-left: 0px
     padding: 20px 20px 20px
@@ -39,6 +39,7 @@ style: """
     h1
         font-size: 150%
         font-weight: 300
+        text-decoration: underline
         margin: 16px 0 8px
 
     strong
