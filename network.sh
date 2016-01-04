@@ -89,16 +89,28 @@ displayWiredInterface() {
 
 }
 
-displayPublicIP() {
-# get public IP
-    publicIP=$(curl -s http://icanhazip.com)
+displayPublicInfo() {
+# get public IP and PTR records and display them.  Omit the PTR if it matches the Public IP and provides no additional information
+     publicIP=$(curl -s http://icanhazip.com)
+     publicPTR=$(curl -s http://icanhazptr.com)
+
     if [ ! -z "${publicIP}" ];then
         echo "<tr><td><span class='green'>$iconWorld</span></td><td>Public IP</td><td><span class='green'>$publicIP</span></td></tr>"
     else
         #echo "<tr><td><span class='red'>$iconWorld</span></td><td>Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
         echo ""
     fi
+    
+    if [ ! -z "${publicPTR}" ] && [ "${publicIP}" != "${publicPTR}" ];then
+        echo "<tr><td><span class='green'>$iconWorld</span></td><td>Public PTR</td><td><span class='green'>$publicPTR</span></td></tr>"
+    else
+        #echo "<tr><td><span class='red'>$iconWorld</span></td><td>Public IP</td><td><span class='red'>Unavailable</span></td></tr>"
+        echo ""
+    fi    
 }
+
+
+
 
 mainDisplay() {
     echo "<h1>NETWORK</h1>
@@ -112,8 +124,8 @@ mainDisplay() {
         displayWiredInterface $i
     done
     
-    displayPublicIP
-
+    displayPublicInfo
+    
     echo "</table>"
 }
 
